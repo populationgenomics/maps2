@@ -29,11 +29,15 @@ abline(a=0,b=1)
 # now load the controls
 syn_ctrl = read.table("syn_ps_controls.tsv",header=TRUE)
 
+# load non cancer
+syn_non_cancer = read.table("syn_ps_non_cancer.tsv",header=TRUE)
+
 plot(ps~mu, data =syn, log='',xlab="mutability", ylab="proportion of singletons")
 points(ps~mu, data =syn_ctrl, col=2)
-legend('topright', legend=c("gnomAD exomes (n=141,456)","controls (n=60,146)"), col=c(1,2), lwd=2, bty='n')
+points(ps~mu, data =syn_non_cancer, col=3)
+legend('topright', legend=c("gnomAD exomes (n=125,748)","controls (n=60,146)","non-cancer (n=??)"), col=c(1,2,3), lwd=2, bty='n')
 
 # add genomes
-syn_gen = read.table("../syn_ps.genomes.tsv",header=TRUE)
+#syn_gen = read.table("../syn_ps.genomes.tsv",header=TRUE)
 #points(ps~mu, data =syn_gen, col=3)
 #legend('topright', legend=c("gnomAD exomes (n=141,456)","controls (n=60,146)", "v2.1.1 genomes (n=)"), col=c(1,2,3), lwd=2, bty='n')
