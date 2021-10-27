@@ -3,6 +3,7 @@
 ## runs very slow.
 
 # version 2 
+# extract controls only, as a proxy to subsampling
 
 import hail as hl;
 from typing import Optional, Union;
