@@ -8,6 +8,10 @@
 # hail script MAPSextract_controls.py 
 # generated file syn_ps_controls.tsv
 
+# 28/10/2021
+# add non cancer and other subsets
+
+
 # compare with MAPS fit 10/2019
 require(tidyverse)
 
