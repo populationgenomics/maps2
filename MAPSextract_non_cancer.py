@@ -249,11 +249,11 @@ ht = ht.filter((hl.len(ht.filters) == 0) & get_an_adj_criteria(ht, {'female': 57
 ht = filter_vep_to_canonical_transcripts(ht)
 ht = get_worst_consequence_with_non_coding(ht)
 
-context = context_ht[ht.key]
-snp_ht = prepare_ht(ht.annotate(context=context.context, methylation=context.methylation), True, False)
+# for MAPS data extractionm filter on synonymous as early as possible for performance
+ht = ht.filter(ht.worst_csq == 'synonymous_variant')
 
-# for convenience, too long to write snp_ht 
-ht = snp_ht
+context = context_ht[ht.key]
+ht = prepare_ht(ht.annotate(context=context.context, methylation=context.methylation), True, False)
 
 print('Counting singletons')
 
@@ -264,21 +264,17 @@ subset = 'non_cancer'
 d = hl.eval(ht.globals.freq_index_dict)
 isubset = d[subset]
 
+print(f'in subset {subset}')
+
 ht = ht.group_by('context', 'ref', 'alt', 'methylation_level', 'protein_coding', 'worst_csq').aggregate(variant_count=hl.agg.count_where(ht.freq[isubset].AC > 0), singleton_count=hl.agg.count_where(ht.freq[isubset].AC == 1))
 
 # annotate with mutability and proportion of singleton 
 ht = ht.annotate(mu=mutation_ht[
   hl.struct(context=ht.context, ref=ht.ref, alt=ht.alt, methylation_level=ht.methylation_level)].mu_snp)
 
-# safeguard: make sure mutability was found for every variant
-# was run on exomes and none was found, no need to do again it is time-consuming
-#if not ht.all(hl.is_defined(ht.mu)):
-#  print('Some mu were not found...')
-  #print(small.aggregate(hl.agg.filter(hl.is_missing(small.mu), hl.agg.take(small.row, 1)[0])))
-  #sys.exit(1)
 
 ## calibrate maps on synonymous variants
-syn_ps_ht = ht.filter(ht.worst_csq == 'synonymous_variant').persist()
+syn_ps_ht = ht
 
 # group by mutability
 syn_ps_ht = syn_ps_ht.group_by(syn_ps_ht.mu).aggregate(singleton_count=hl.agg.sum(syn_ps_ht.singleton_count),
