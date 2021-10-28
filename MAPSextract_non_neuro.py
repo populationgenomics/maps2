@@ -279,6 +279,7 @@ ht = ht.annotate(mu=mutation_ht[
 ## calibrate maps on synonymous variants
 syn_ps_ht = ht
 
+
 # group by mutability
 syn_ps_ht = syn_ps_ht.group_by(syn_ps_ht.mu).aggregate(singleton_count=hl.agg.sum(syn_ps_ht.singleton_count),
 variant_count=hl.agg.sum(syn_ps_ht.variant_count))
