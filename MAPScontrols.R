@@ -32,10 +32,28 @@ syn_ctrl = read.table("syn_ps_controls.tsv",header=TRUE)
 # load non cancer
 syn_non_cancer = read.table("syn_ps_non_cancer.tsv",header=TRUE)
 
+# load non neuro
+syn_non_neuro = read.table("syn_ps_non_neuro.tsv",header=TRUE)
+
+# load cancer only
+syn_cancer = read.table("syn_ps_cancer.tsv",header=TRUE)
+
 plot(ps~mu, data =syn, log='',xlab="mutability", ylab="proportion of singletons")
 points(ps~mu, data =syn_ctrl, col=2)
 points(ps~mu, data =syn_non_cancer, col=3)
-legend('topright', legend=c("gnomAD exomes (n=125,748)","controls (n=60,146)","non-cancer (n=??)"), col=c(1,2,3), lwd=2, bty='n')
+points(ps~mu, data =syn_non_neuro, col=4)
+points(ps~mu, data =syn_cancer, col=5)
+legend('top', legend=c("gnomAD exomes (n=125,748)","controls (n=60,146)","non-cancer (n=??)","non-neuro (n=??)","cancer (n=??)"), col=1:5, lwd=2, bty='n')
+
+
+# same plot on x log-scale
+plot(ps~mu, data =syn, log='x',xlab="mutability", ylab="proportion of singletons")
+points(ps~mu, data =syn_ctrl, col=2)
+points(ps~mu, data =syn_non_cancer, col=3)
+points(ps~mu, data =syn_non_neuro, col=4)
+points(ps~mu, data =syn_cancer, col=5)
+legend('bottom', legend=c("gnomAD exomes (n=125,748)","controls (n=60,146)","non-cancer (n=??)","non-neuro (n=??)","cancer (n=??)"), col=1:5, lwd=2, bty='n')
+
 
 # add genomes
 #syn_gen = read.table("../syn_ps.genomes.tsv",header=TRUE)
